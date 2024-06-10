@@ -1,19 +1,25 @@
 import express from "express";
-import Tokenvalidation from "../middleware/requireAuth.js";
 import {
-  register,
-  login,
-  userDetail,
-  forgotpassword,
-  resetpassword,
-} from "../controllers/auth.js";
+  userAdd,
+  userGet,
+  userUpdate,
+  userDelete,
+  userList,
+} from "../controllers/user.js";
+import SchemaValidator from "../middleware/validator.js";
+import { userUpadteSchema } from "../validations/userValidations.js";
 
-const userRoute = express.Router();
+const UserRouter = express.Router();
 
-userRoute.post("/register", register);
-userRoute.post("/login", login);
-userRoute.get("/userdetail", Tokenvalidation, userDetail);
-userRoute.post("/forgotpassword", Tokenvalidation, forgotpassword);
-userRoute.post("/resetpassword", Tokenvalidation, resetpassword);
+UserRouter.post("/useradd", userAdd);
+UserRouter.get("/userget/:id", userGet);
+UserRouter.get("/userlist", userList);
 
-export default userRoute;
+UserRouter.patch(
+  "/userupdate/:id",
+  SchemaValidator(userUpadteSchema),
+  userUpdate
+);
+UserRouter.delete("/userdelete/:id", userDelete);
+
+export default UserRouter;
