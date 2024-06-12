@@ -82,6 +82,7 @@ const userList = async (req, res) => {
   try {
     // const users = await authModal.find().sort({ createdAt: -1 });
     const users = await authModal.find().limit(Number(limit)).skip(skip);
+    
 
     const total = await authModal.countDocuments();
     // res.send({ status: "success", data: users });
