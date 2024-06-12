@@ -13,7 +13,7 @@ const UserRouter = express.Router();
 
 UserRouter.post("/useradd", userAdd);
 UserRouter.get("/userget/:id", userGet);
-UserRouter.get("/userlist", userList);
+UserRouter.get("/userlist/:limit/:page", userList);
 
 UserRouter.patch(
   "/userupdate/:id",

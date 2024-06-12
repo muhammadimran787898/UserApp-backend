@@ -14,6 +14,7 @@ const authScheam = new mongoose.Schema(
     status: { type: String, enum: ["active", "inactive"] },
     state: { type: String },
     city: { type: String },
+    country: { type: String },
   },
 
   { timestamps: true }
