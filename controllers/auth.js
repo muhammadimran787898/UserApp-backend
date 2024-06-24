@@ -2,11 +2,13 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import { authModal } from "../models/authScheam.js";
 import jsonwebtoken from "../utils/jwt.js";
-import EmailSender from "../utils/mailer.js";
+import sendEmail from "../middleware/mailer.js";
 
 //Rigister
 
 const register = async (req, res) => {
+  console.log(req, "iii");
+
   const { name, email, password } = req.body;
 
   try {
@@ -24,10 +26,11 @@ const register = async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     const saveUser = new authModal({ name, email, password: hashed });
     const user = await saveUser.save();
-
-    console.log(name, email, "chod mcha ha ");
-
-    EmailSender(name, email);
+    sendEmail(
+      email,
+      "user created successfully",
+      `Hello ${name} you just registered on app`
+    );
 
     res.status(200).json({ user });
   } catch (error) {
@@ -89,10 +92,17 @@ const forgotpassword = async (req, res) => {
   try {
     const user = await authModal.findOne({ email });
     if (!user) {
-      return res.status(500).json({ message: "user not found" });
+      return res
+        .status(400)
+        .json({ message: "user not found enter registered email" });
     }
-    res.status(201).json({ message: "reset mail sent" });
+    res.status(201).json({ message: "reset mail sent", id: user._id });
     EmailSender(user.name, email, resetpassword);
+    sendEmail(
+      email,
+      "password reset link sent successfully",
+      `Hello ${user.name} reset link sent successfully`
+    );
   } catch (error) {}
 };
 

@@ -39,7 +39,7 @@ const userUpdate = async (req, res) => {
   try {
     // try {
     const user = await authModal.findByIdAndUpdate({ _id: id }, req.body, {
-      new: true, // Return the updated document
+      new: true,
       runValidators: true, // Enforce schema validation
     });
 
@@ -77,12 +77,11 @@ const userGet = async (req, res) => {
 
 const userList = async (req, res) => {
   console.log(req);
-  const { limit,page } = req.params;
+  const { limit, page } = req.params;
   const skip = (page - 1) * limit;
   try {
     // const users = await authModal.find().sort({ createdAt: -1 });
     const users = await authModal.find().limit(Number(limit)).skip(skip);
-    
 
     const total = await authModal.countDocuments();
     // res.send({ status: "success", data: users });
